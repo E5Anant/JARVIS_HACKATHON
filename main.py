@@ -40,7 +40,8 @@ from shared_queue import ui_update_queue
 try:
     from brain import generate
     from backend.vocalize.stt.listenjs import ListenJS
-    from backend.vocalize.tts.edgetts import Edgetts
+    # from backend.vocalize.tts.edgetts import Edgetts
+    from backend.vocalize.tts.elevenlabstts import ElevenLabsTTS
     from backend.vision import vision_system
     
     logger.info(f"System: {platform.system()}, Release: {platform.release()}")
@@ -93,30 +94,43 @@ def initialize_stt():
         traceback.print_exc()
         return False
 
+class ElevenLabsSpeaker:
+    """Thin adapter so the rest of the app can call tts.speak(text)."""
+    def __init__(self, voice_id: str | None = None):
+        # Default voice can be overridden via env ELEVENLABS_VOICE_ID
+        self.voice_id = voice_id or os.environ.get("ELEVENLABS_VOICE_ID", "EtsjFhqOd0YWASYxlmIg")
+
+    def speak(self, text: str):
+        try:
+            # Uses the function provided by backend.vocalize.tts.elevenlabstts
+            ElevenLabsTTS(text=text, voice_id=self.voice_id)
+        except Exception as e:
+            logger.error(f"ElevenLabs speak failed: {e}")
+            # Fall back to console output so we don't crash the pipeline
+            print(f"Jarvis: {text}")
+
+
 def initialize_tts():
     """
-    Initializes Text-to-Speech system with fallbacks for different platforms.
+    Initializes Text-to-Speech system using ElevenLabs.
     Returns True on success, False on failure.
     """
     global tts
-    
-    logger.info("Initializing Text-to-Speech system...")
-    
+
+    logger.info("Initializing Text-to-Speech system (ElevenLabs)...")
+
+    # Basic sanity: API key should be available; the imported module loads dotenv
+    if not os.environ.get("ELEVENLABS_API_KEY"):
+        logger.error("ELEVENLABS_API_KEY not set. Add it to your .env via setup_env.py.")
+        return False
+
     try:
-        # Primary initialization
-        tts = Edgetts()
-        logger.info("TTS Initialized successfully using EdgeTTS.")
+        voice_id = os.environ.get("ELEVENLABS_VOICE_ID", "EtsjFhqOd0YWASYxlmIg")
+        tts = ElevenLabsSpeaker(voice_id=voice_id)
+        logger.info("TTS initialized successfully using ElevenLabs.")
         return True
     except Exception as primary_error:
-        logger.warning(f"Primary TTS initialization failed: {primary_error}")
-        
-        # Platform-specific error messages
-        if platform.system() == "Windows":
-            logger.error("On Windows, EdgeTTS requires Internet connectivity or appropriate fallbacks.")
-        elif platform.system() in ["Linux", "Darwin"]:
-            logger.error("On Unix systems, check network connectivity and proxy settings for EdgeTTS.")
-        
-        logger.error(f"Failed to initialize Text-to-Speech (TTS): {primary_error}")
+        logger.warning(f"TTS initialization failed: {primary_error}")
         traceback.print_exc()
         return False
 
