@@ -1,0 +1,881 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Karla:ital,wght@0,200..800;1,200..800&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --primary-blue: rgba(0, 149, 255, 0.9);
+    --secondary-blue: rgba(13, 166, 255, 0.93);
+    --hologram-bg: rgba(16, 42, 67, 0.85);
+    --widget-border: rgba(0, 195, 255, 0.5);
+    --widget-glow: rgba(0, 149, 255, 0.3);
+}
+
+/* Global Styles */
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Exo';
+    background: linear-gradient(#00266d, #000c22);
+    color: #fff;
+}
+
+
+body {
+    /* Changed justify-content from center to flex-start to shift content to the top */
+    background-image: radial-gradient(#ffffff65 1px, transparent 1px);
+    background-size: 45px 45px;
+    /* Increased spacing between dots */
+    background-blend-mode: overlay;
+    overflow: hidden;
+    display: flex;
+    color: #fff;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* Align items to the top */
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 150px;
+    /* Optional extra padding from the top */
+}
+
+/* Jarvis Container */
+.jarvis-container {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    display: flex;
+    background-color: #001d54;
+    margin-bottom: 0px;
+    justify-content: center;
+    align-items: center;
+    animation: pulseGlow 1.8s infinite alternate;
+    z-index: 1;
+}
+
+
+.outer-circle {
+    position: absolute;
+    top: -1;
+    left: -2;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 4px solid #1aabff;
+    box-shadow: 0 0 8px 2px rgba(0, 162, 255, 0.878), inset 0 0 1px 1px rgba(0, 93, 187, 0.659);
+    z-index: 1;
+    animation: pulseOuterRandom 8s linear infinite alternate;
+}
+
+/* Inner Circle */
+.inner-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    bottom: 52%;
+    transform: translate(-50%, -50%);
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid #d2efff;
+    box-shadow: 0 0 15px 5px rgba(0, 83, 172, 0.8);
+    animation: pulseInnerRandom 12s linear infinite;
+    z-index: 1;
+}
+
+.circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 240px;
+    height: 240px;
+    border: 2px solid rgba(91, 186, 255, 0.9);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(0.98);
+    }
+}
+
+/* Jarvis Text */
+.jarvis-text {
+    font-family: 'Raleway', 'Ubuntu', monospace;
+    font-size: 2em;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Text Output Area */
+#output-area {
+    background-color: transparent;
+    color: #fff;
+    font-family: 'Exo', 'Ubuntu', monospace;
+    font-size: 1em;
+    padding: 10px 0;
+    border-radius: 10px;
+    width: 80%;
+    margin-top: 200px;
+    text-align: center;
+    margin-bottom: 70px;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.widget {
+    position: absolute;
+    background: #0091ff1a;
+    /* slightly less opaque background */
+    padding: 15px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    backdrop-filter: blur(4px);
+    /* Increased blur */
+    font-family: 'Exo', 'Ubuntu', monospace;
+    font-weight: 500;
+    transform: scale(0.9);
+    min-width: 200px;
+    min-height: 100px;
+    max-width: 683px;
+    max-height: 552px;
+    overflow: hidden;
+    color: white;
+    z-index: 100;
+    border: 1px solid rgba(0, 195, 255, 0.4);
+    /* Thinner, more subtle border */
+    border-radius: 12px;
+    /* More rounded corners */
+    box-shadow: inset 0 0 15px rgba(0, 149, 255, 0.2), 0 0 20px rgba(0, 149, 255, 0.3);
+}
+
+.widget.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.widget.dragging {
+    transition: none;
+    cursor: grabbing !important;
+}
+
+.widget-close {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+    transition: all 0.2s ease;
+}
+
+.widget-close:hover {
+    color: white;
+    transform: scale(1.2);
+}
+
+.widget-content {
+    position: relative;
+    min-height: 50px;
+    width: 100%;
+    height: calc(100% - 40px);
+    overflow: auto;
+}
+
+.widget-content.image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.widget-content.image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.widget-content.text {
+    line-height: 1.4;
+    white-space: pre-wrap;
+    padding: 10px;
+}
+
+.widget-content.video {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.widget-content.video::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 149, 255, 0.2);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.widget-content.video iframe {
+    /* Apply to iframe */
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.widget-resize {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    cursor: nwse-resize;
+    background: transparent;
+}
+
+.size-calculator {
+    position: fixed;
+    visibility: hidden;
+    height: auto;
+    width: auto;
+    white-space: pre-wrap;
+    font-family: monospace;
+    line-height: 1.4;
+    padding: 15px;
+}
+
+/* Scrollbar styling */
+.widget-content::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.widget-content::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.widget-content::-webkit-scrollbar-thumb {
+    background: var(--primary-blue);
+    border-radius: 3px;
+}
+
+.widget-content::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-blue);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    padding-bottom: 8px;
+    /* Add some bottom padding for spacing */
+    margin-bottom: 8px;
+    border-bottom: 2px solid white;
+}
+
+.widget-header:hover {
+    cursor: grab;
+}
+
+
+
+.widget-title {
+    position: relative;
+    background: rgb(0, 95, 183);
+    padding-left: 12px;
+    padding-top: 0.5px;
+    padding-bottom: 0.5px;
+    padding-right: 75%;
+    color: white;
+    font-weight: 600;
+    font-size: 1.5em;
+    margin: 8px 0;
+    max-width: calc(100% - 100px);
+    white-space: nowrap;
+    /* Prevent text from wrapping */
+    overflow: hidden;
+    /* Hide any overflowing text */
+    /* text-overflow: ellipsis;  */
+    font-family: 'Exo', 'Ubuntu', serif;
+    letter-spacing: 0px;
+    line-height: 1.4;
+    text-transform: uppercase;
+
+}
+
+.widget-title::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    z-index: 2;
+}
+
+.widget-title::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg,
+            transparent,
+            rgba(0, 149, 255, 0.2),
+            transparent);
+}
+
+.widget-close {
+    background: rgba(0, 21, 66, 0.9);
+    border: 1px solid rgba(0, 195, 255, 0.5);
+    border-radius: 4px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0 8px;
+    line-height: 1.2;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+}
+
+/* --- Weather Widget Styles --- */
+.widget-content.weather {
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.weather-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.weather-header-extra {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: rgba(200, 220, 255, 0.9);
+    padding-bottom: 5px;
+    border-bottom: 1px solid rgba(0, 195, 255, 0.3);
+    margin-bottom: 10px;
+    cursor: grab;
+}
+
+.weather-title-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+    opacity: 0.8;
+    color: rgba(200, 220, 255, 0.9);
+}
+
+.weather-title-text {
+    font-family: 'Exo', sans-serif;
+    font-weight: 600;
+    font-size: 1em;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-right: auto;
+}
+
+.weather-refresh-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: transform 0.5s ease, opacity 0.3s ease;
+}
+
+.weather-refresh-icon:hover {
+    opacity: 1;
+    transform: rotate(180deg);
+}
+
+.weather-refresh-icon.rotating {
+    animation: rotateCircle 1s linear infinite;
+}
+
+.weather-main {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.weather-temp-section {
+    color: #fff;
+}
+
+.weather-temperature {
+    font-size: 3.5em;
+    font-weight: 300;
+    line-height: 1;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.weather-location {
+    font-size: 1em;
+    font-weight: 500;
+    color: rgba(220, 235, 255, 1);
+    margin-top: 5px;
+}
+
+.weather-description {
+    font-size: 0.9em;
+    font-weight: 400;
+    color: rgba(200, 220, 255, 0.8);
+}
+
+.weather-icon-section svg {
+    width: 90px;
+    height: 90px;
+    filter: drop-shadow(0 0 10px rgba(13, 166, 255, 0.7));
+}
+
+.weather-details {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(0, 195, 255, 0.3);
+}
+
+.weather-detail-item {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    flex-basis: 30%;
+    padding: 0 10px;
+    position: relative;
+}
+
+.weather-detail-item:not(:first-child)::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10%;
+    bottom: 10%;
+    width: 1px;
+    background-color: rgba(0, 195, 255, 0.3);
+}
+
+.weather-detail-item:first-child {
+    padding-left: 0;
+}
+
+.weather-detail-item:last-child {
+    padding-right: 0;
+}
+
+.weather-detail-item .detail-label {
+    font-size: 0.7em;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: rgba(200, 220, 255, 0.7);
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.weather-detail-item .detail-value {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #fff;
+}
+
+
+/* Animations */
+@keyframes rotateCircle {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulseInnerRandom {
+
+    0%,
+    10% {
+        transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    15%,
+    20% {
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+    25% {
+        transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    30%,
+    40% {
+        transform: translate(-50%, -50%) scale(1.14);
+    }
+
+    45% {
+        transform: translate(-50%, -50%) scale(0.98);
+    }
+
+    50%,
+    60% {
+        transform: translate(-50%, -50%) scale(1.04);
+    }
+
+    65% {
+        transform: translate(-50%, -50%) scale(1.0);
+    }
+
+    70%,
+    85% {
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    90%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulseOuterRandom {
+
+    0%,
+    8% {
+        transform: scale(0.98);
+    }
+
+    12%,
+    18% {
+        transform: scale(1.12);
+    }
+
+    22% {
+        transform: scale(0.9);
+    }
+
+    28%,
+    38% {
+        transform: scale(1.0);
+    }
+
+    42% {
+        transform: scale(0.98);
+    }
+
+    48%,
+    58% {
+        transform: scale(1.1);
+    }
+
+    62% {
+        transform: scale(0.8);
+    }
+
+    68%,
+    83% {
+        transform: scale(0.88);
+    }
+
+    88%,
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+@keyframes pulseGlow {
+    from {
+        box-shadow: 0 0 20px 5px rgba(13, 166, 255, 0.93) scale(1);
+    }
+
+    to {
+        box-shadow: 0 0 30px 15px rgba(0, 149, 255, 0.9) scale(1.8);
+    }
+}
+
+@keyframes rotatePartialRing {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+#bottom-left-output-wrapper {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    max-width: 550px;
+    max-height: 450px;
+}
+
+#bottom-left-output {
+    height: 100%;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: rgba(0, 0, 51, 0.492);
+    border-radius: 5px;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    pointer-events: auto;
+}
+
+#bottom-left-text {
+    font-family: 'Ubuntu', monospace;
+    font-size: 0.9em;
+    color: #fff;
+    opacity: 0.7;
+    word-break: break-word;
+    display: block;
+    line-height: 1.3;
+}
+
+#bottom-left-output::-webkit-scrollbar {
+    width: 8px;
+}
+
+#bottom-left-output::-webkit-scrollbar-track {
+    background: rgba(0, 128, 255, 0.1);
+    border-radius: 5px;
+}
+
+#bottom-left-output::-webkit-scrollbar-thumb {
+    background: rgba(0, 149, 255, 0.5);
+    border-radius: 5px;
+}
+
+#bottom-left-output::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 255, 255, 0.7);
+}
+
+
+/* --- UPDATED & NEW STYLES for Chat Input & File List --- */
+
+#text-input-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10, 17, 35, 0.4);
+    border: 1px solid rgba(0, 149, 255, 0.15);
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+    box-shadow: 0 0 10px rgba(0, 149, 255, 0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    /* Stack file list and input vertically */
+    justify-content: center;
+    align-items: center;
+    opacity: 0.6;
+}
+
+/* Expanded state for hover, focus, or when files are added (.active) */
+#text-input-container:hover,
+#text-input-container:focus-within,
+#text-input-container.active {
+    width: 350px;
+    /* A bit wider to show file names */
+    height: auto;
+    /* Let height grow */
+    max-height: 250px;
+    /* But not too tall */
+    border-radius: 20px;
+    border-color: rgba(0, 149, 255, 0.4);
+    background: rgba(15, 25, 45, 0.65);
+    box-shadow: 0 3px 15px rgba(0, 149, 255, 0.25);
+    opacity: 1;
+    justify-content: flex-end;
+    /* Pin the text input to the bottom */
+}
+
+/* Dragover state */
+#text-input-container.dragover {
+    border-style: dashed;
+    border-color: rgba(0, 195, 255, 0.8);
+    background: rgba(15, 25, 45, 0.8);
+}
+
+#drag-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 149, 255, 0.15);
+    border: 3px dashed rgba(0, 195, 255, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8em;
+    font-family: 'Exo', sans-serif;
+    color: rgba(255, 255, 255, 0.9);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#drag-overlay.active {
+    opacity: 1;
+}
+
+
+#text-input {
+    width: 100%;
+    padding: 10px 20px;
+    /* More comfortable padding */
+    box-sizing: border-box;
+    /* Include padding in width calculation */
+    font-family: 'Exo', sans-serif;
+    font-size: 15px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    outline: none;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.1s;
+    flex-shrink: 0;
+    /* Prevent input field from shrinking */
+}
+
+#text-input-container:hover #text-input,
+#text-input-container:focus-within #text-input,
+#text-input-container.active #text-input {
+    opacity: 1;
+}
+
+#text-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}
+
+#chat-icon {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    opacity: 0.7;
+    transition: all 0.4s ease;
+    pointer-events: none;
+    filter: drop-shadow(0 0 2px rgba(0, 149, 255, 0.4));
+}
+
+#text-input-container:hover #chat-icon,
+#text-input-container:focus-within #chat-icon,
+#text-input-container.active #chat-icon {
+    opacity: 0;
+    transform: scale(0.8);
+}
+
+/* File List Container */
+#file-list-container {
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 10px 10px 0 10px;
+    box-sizing: border-box;
+}
+
+/* Individual File Item */
+.file-item {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-size: 13px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.file-preview {
+    width: 28px;
+    height: 28px;
+    border-radius: 4px;
+    margin-right: 8px;
+    object-fit: cover;
+    background-color: rgba(0, 0, 0, 0.2);
+    flex-shrink: 0;
+}
+
+.file-info {
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.file-remove-btn {
+    margin-left: 8px;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: bold;
+    font-size: 18px;
+    padding: 0 5px;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.file-remove-btn:hover {
+    color: #ff8a8a;
+}

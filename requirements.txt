@@ -1,0 +1,28 @@
+# Core dependencies
+edge-tts>=6.1.8  # Fast and versatile TTS system with multiple voices
+eel>=0.16.0  # Web-based UI framework
+google-genai>=0.3.2  # Google Generative AI API
+SpeechRecognition>=3.10.0  # Cross-platform speech recognition
+pygame>=2.5.2  # Audio handling
+pydub>=0.25.1  # Audio processing
+pyaudio>=0.2.13  # Audio I/O
+
+# Web and system interaction
+selenium>=4.15.0  # Web automation
+webdriver-manager>=4.0.1  # WebDriver management
+pyautogui>=0.9.54  # GUI automation
+AppOpener>=1.7  # Cross-platform application management
+duckduckgo-search>=3.9.6  # Web search without API limits
+googlesearch-python>=1.1.0  # Google search API
+python-weather>=1.0.1  # Weather information
+mtranslate>=1.8  # Translation services
+pywhatkit>=5.4  # Web automation tools
+elevenlabs>=0.1.14  # ElevenLabs TTS API
+# AI and ML components
+unisonai>=0.2.0  # AI utilities
+opencv-python>=4.8.1.78  # Computer vision
+youtube-transcript-api
+# Development and packaging
+pyinstaller>=6.4.0  # For creating standalone executables
+pypdf>=3.0.0  # PDF handling
+pytz

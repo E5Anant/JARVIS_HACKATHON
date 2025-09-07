@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS-MK-IV</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="/eel.js"></script>
+    <script>eel.expose(get_base_url); function get_base_url() { return eel._base_url }</script>
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Exo:wght@400;500;600;700&display=swap">
+
+</head>
+
+<body>
+    <!-- Jarvis UI -->
+    <div class="jarvis-container">
+        <div class="container-glow"></div>
+        <div class="outer-circle"></div>
+        <div class="inner-circle"></div>
+        <div class="circle"></div>
+        <div class="circle2"></div>
+        <div class="circle"></div>
+        <div class="jarvis-text" id="assistant-name-display" style="text-transform: uppercase;">
+            JARVIS
+        </div>
+    </div>
+
+    <!-- Text Output Area -->
+    <div id="output-area" style="font-family: 'Exo';">
+        <!-- Text will be printed here -->
+    </div>
+
+    <!-- Bottom-Left Output -->
+    <div id="bottom-left-output-wrapper">
+        <div id="bottom-left-output">
+            <span id="bottom-left-text" style="font-family: 'Exo';"></span>
+        </div>
+    </div>
+    <div id="drag-overlay">Drop files to upload</div>
+    <!-- NEW: Wrapper for the chat widget to create a large hover area -->
+    <div id="chat-widget-wrapper">
+        <!-- The existing input container now lives inside the wrapper -->
+        <div id="text-input-container">
+            <svg id="chat-icon" width="18" height="18" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 12C21 16.9706 16.9706 21 12 21C10.2385 21 8.59412 20.5217 7.2 19.68L3 21L4.32 16.8C3.47825 15.4059 3 13.7615 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                    fill="none" stroke="rgba(200, 220, 255, 0.8)" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+            <input type="text" id="text-input" placeholder="" autocomplete="off">
+            <div id="file-list-container"></div>
+        </div>
+    </div>
+
+    <script>
+        // Enter key handler
+        document.getElementById('text-input').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                const textInput = document.getElementById('text-input');
+                const message = textInput.value; // No need to trim here, sendMessage handles it
+
+                // Call the unified function to process the prompt
+                sendMessage(message);
+
+                // The sendMessage function now handles clearing the input field.
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const dragOverlay = document.getElementById('drag-overlay');
+            const container = document.getElementById('text-input-container');
+            const wrapper = document.getElementById('chat-widget-wrapper');
+
+            let dragCounter = 0;
+
+            function showOverlay() {
+                dragOverlay.classList.add('active');
+                container.classList.add('dragover');
+            }
+
+            function hideOverlay() {
+                dragOverlay.classList.remove('active');
+                container.classList.remove('dragover');
+            }
+
+            wrapper.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            wrapper.addEventListener('dragenter', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dragCounter++;
+                showOverlay();
+            });
+
+            wrapper.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dragCounter--;
+                if (dragCounter === 0) hideOverlay();
+            });
+
+            wrapper.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dragCounter = 0;
+                hideOverlay();
+
+                const files = e.dataTransfer.files;
+                if (files.length) {
+                    handleDroppedFiles(files);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
