@@ -64,6 +64,7 @@ You’ll be prompted for:
 - GEMINI_API_KEY (get one at https://aistudio.google.com/app/apikey)
 - UserName, Age (for personalization)
 - AssistantName (e.g., JARVIS)
+- ELEVENLABS_API_KEY
 
 2) Run
 
@@ -180,3 +181,4 @@ python build_executable.py
 
 ––
 Made with a helpful attitude and just enough sarcasm to keep things interesting.
+
