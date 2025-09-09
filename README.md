@@ -15,6 +15,7 @@ If you like assistants that are helpful, fast, and just a little sarcastic, welc
 - System automation: open/close apps, web flows, inputs via a controller
 - Web research: Google and DuckDuckGo with concise, source‑linked results
 - YouTube summarize: fetch transcript and generate a clean summary
+- Nano banana 🍌 powered image generation
 - Pack as an app: PyInstaller build script produces a distributable
 
 
@@ -172,7 +173,7 @@ python build_executable.py
 ## Credits
 
 - Eel for the hybrid UI, Edge TTS for fast voices
-- Google Generative AI (Gemini) for reasoning and vision
+- Google Generative AI (Gemini) for reasoning and vision, image generation (nano banana 🍌)
 - UnisonAI for the agent/tool framework
 - Selenium, DuckDuckGo/Google search, OpenCV, PyAutoGUI and friends
 - ElevenLabs for advanced TTS capabilities and film accurate voices
@@ -181,4 +182,5 @@ python build_executable.py
 
 ––
 Made with a helpful attitude and just enough sarcasm to keep things interesting.
+
 
