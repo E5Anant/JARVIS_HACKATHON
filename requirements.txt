@@ -17,6 +17,7 @@ googlesearch-python>=1.1.0  # Google search API
 python-weather>=1.0.1  # Weather information
 mtranslate>=1.8  # Translation services
 pywhatkit>=5.4  # Web automation tools
+ddgs # for websearch
 elevenlabs>=0.1.14  # ElevenLabs TTS API
 # AI and ML components
 unisonai>=0.2.0  # AI utilities
@@ -25,4 +26,5 @@ youtube-transcript-api
 # Development and packaging
 pyinstaller>=6.4.0  # For creating standalone executables
 pypdf>=3.0.0  # PDF handling
+
 pytz
